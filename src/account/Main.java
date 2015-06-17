@@ -24,6 +24,9 @@ public class Main {
 		for(int i=0;i<customers.length;i++){
 			System.out.println(customers[i]);		
 		}
+		for(int i=0;i<suppliers.length;i++){
+			System.out.println(suppliers[i]);		
+		}
 	}
 	
 	public static void storeDB(){
@@ -32,9 +35,13 @@ public class Main {
 	
 	public static void loadDB(){		
 		boolean usersLoaded = loadUsers();
-		boolean loadCustomers = loadCustomers();		
+		boolean customersLoaded = loadCustomers();
+		boolean suppliersLoaded = loadSuppliers();
 		if(!usersLoaded){
 			System.out.println("error in validating users count");
+		}
+		if(!customersLoaded){
+			System.out.println("error in validating Customers count");
 		}
 	}
 	
@@ -75,12 +82,36 @@ public class Main {
 		customers = new Customer[loadedCustomers.length];
 		for(int i=0;i<customers.length;i++){
 			if(loadedCustomers[i].split(" ").length == 4){
-				customers[i]= new Customer(Integer.parseInt(loadedCustomers[i].split(" ")[0]), loadedCustomers[i].split(" ")[1], loadedCustomers[i].split(" ")[2], loadedCustomers[i].split(" ")[3]);
+				customers[i]= new Customer(Integer.parseInt(loadedCustomers[i].split(" ")[0]), loadedCustomers[i].split(" ")[1], loadedCustomers[i].split(" ")[2], Integer.parseInt(loadedCustomers[i].split(" ")[3]));
 			}else{
 				System.out.println("Customer " + loadedCustomers[i] + " couldnt be loaded.");
 			}
 		}
-		if(users.length == nCustomers){
+		if(customers.length == nCustomers){
+			return true;
+		}else{
+			return false;
+		}	
+	}
+	
+	public static boolean loadSuppliers(){
+		String [] validation = readFile("validateData.txt");
+		int nsuppliers = 0;
+		for(int i=0;i<validation.length;i++){
+			if(validation[i].split(" ")[0].compareTo("suppliers") == 0){
+				nsuppliers = Integer.parseInt(validation[i].split(" ")[1]);
+			}
+		}
+		String [] loadedSuppliers = readFile("suppliers.txt");
+		suppliers = new Supplier[loadedSuppliers.length];
+		for(int i=0;i<suppliers.length;i++){
+			if(loadedSuppliers[i].split(" ").length == 4){
+				suppliers[i]= new Supplier(Integer.parseInt(loadedSuppliers[i].split(" ")[0]), loadedSuppliers[i].split(" ")[1], loadedSuppliers[i].split(" ")[2], Integer.parseInt(loadedSuppliers[i].split(" ")[3]));
+			}else{
+				System.out.println("Customer " + loadedSuppliers[i] + " couldnt be loaded.");
+			}
+		}
+		if(suppliers.length == nsuppliers){
 			return true;
 		}else{
 			return false;

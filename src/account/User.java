@@ -12,4 +12,8 @@ public class User {
 		this.password = password;
 		this.mobile = mobile;
 	}
+	
+	public String toString(){
+		return id + " " + name + " " + password + " " + mobile;
+	}
 }
