@@ -8,3 +8,4 @@ public class Product {
 	int sellingPrice;
 	int profit;
 }
+
