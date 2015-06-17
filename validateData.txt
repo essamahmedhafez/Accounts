@@ -1,0 +1,7 @@
+users 3
+products 0
+customers 2
+suppliers 0
+warehouses 1
+customerinvoices 0
+supplierinvoices 0

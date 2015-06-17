@@ -1,6 +1,7 @@
 package account;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -18,7 +19,10 @@ public class Main {
 	public static void main(String[] args){
 		loadDB();
 		for(int i=0;i<users.length;i++){
-			System.out.println(users[i].name);
+			System.out.println(users[i]);		
+		}
+		for(int i=0;i<customers.length;i++){
+			System.out.println(customers[i]);		
 		}
 	}
 	
@@ -26,17 +30,61 @@ public class Main {
 		
 	}
 	
-	public static void loadDB(){
+	public static void loadDB(){		
 		boolean usersLoaded = loadUsers();
+		boolean loadCustomers = loadCustomers();		
+		if(!usersLoaded){
+			System.out.println("error in validating users count");
+		}
 	}
 	
+	
 	public static boolean loadUsers(){
+		String [] validation = readFile("validateData.txt");
+		int nUsers = 0;
+		for(int i=0;i<validation.length;i++){
+			if(validation[i].split(" ")[0].compareTo("users") == 0){
+				nUsers = Integer.parseInt(validation[i].split(" ")[1]);
+			}
+		}
 		String [] loadedUsers = readFile("users.txt");
 		users = new User[loadedUsers.length];
 		for(int i=0;i<users.length;i++){
-			users[i]= new User(Integer.parseInt(loadedUsers[i].split(" ")[0]), loadedUsers[i].split(" ")[1], loadedUsers[i].split(" ")[2], loadedUsers[i].split(" ")[3]);			
+			if(loadedUsers[i].split(" ").length == 4){
+				users[i]= new User(Integer.parseInt(loadedUsers[i].split(" ")[0]), loadedUsers[i].split(" ")[1], loadedUsers[i].split(" ")[2], loadedUsers[i].split(" ")[3]);
+			}else{
+				System.out.println("user " + loadedUsers[i] + " couldnt be loaded.");
+			}
 		}
-		return true;
+		if(users.length == nUsers){
+			return true;
+		}else{
+			return false;
+		}	
+	}
+	
+	public static boolean loadCustomers(){
+		String [] validation = readFile("validateData.txt");
+		int nCustomers = 0;
+		for(int i=0;i<validation.length;i++){
+			if(validation[i].split(" ")[0].compareTo("customers") == 0){
+				nCustomers = Integer.parseInt(validation[i].split(" ")[1]);
+			}
+		}
+		String [] loadedCustomers = readFile("customers.txt");
+		customers = new Customer[loadedCustomers.length];
+		for(int i=0;i<customers.length;i++){
+			if(loadedCustomers[i].split(" ").length == 4){
+				customers[i]= new Customer(Integer.parseInt(loadedCustomers[i].split(" ")[0]), loadedCustomers[i].split(" ")[1], loadedCustomers[i].split(" ")[2], loadedCustomers[i].split(" ")[3]);
+			}else{
+				System.out.println("Customer " + loadedCustomers[i] + " couldnt be loaded.");
+			}
+		}
+		if(users.length == nCustomers){
+			return true;
+		}else{
+			return false;
+		}	
 	}
 	
 	public static  String[] readFile(String filename){
